@@ -1,7 +1,9 @@
 services:
   - type: web
-    name: StudyBuddy
+    name: student-buddy-bot
     env: python
-    plan: free
-    buildCommand: ""
-    startCommand: python app.py
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    envVars:
+      - key: GOOGLE_API_KEY
+        value: YOUR_API_KEY_HERE
