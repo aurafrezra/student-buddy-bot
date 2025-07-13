@@ -97,7 +97,10 @@ def save_note():
 # ----------------- RUN APP -------------------
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
 @app.route('/view_notes')
 def view_notes():
     try:
