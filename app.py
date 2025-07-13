@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 
 # 🔑 Gemini API Key
-genai.configure(api_key="AIzaSyCMvzkhnTxRL5F8GueLqr-FUor0g5StBu0+")  # ← Replace this with your actual key
+genai.configure(api_key="AIzaSyAEzg4GS3Ob7NsJOqCzad0sjdg6sqzAZVs")  # ← Replace this with your actual key
 
 # ⚙️ Gemini Model Settings
 generation_config = {
@@ -97,10 +97,7 @@ def save_note():
 # ----------------- RUN APP -------------------
 
 if __name__ == '__main__':
-    import os
-
-port = int(os.environ.get("PORT", 5000))
-app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
 @app.route('/view_notes')
 def view_notes():
     try:
