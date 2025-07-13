@@ -1,129 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>🎙 Talk to StudyBuddy</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      padding: 50px;
-      background: #f1f5f9;
-    }
-
-    .dark-mode {
-      background: #1e1e1e;
-      color: white;
-    }
-
-    #mic-btn {
-      font-size: 40px;
-      background: #0066cc;
-      color: white;
-      border: none;
-      padding: 20px;
-      border-radius: 100px;
-      cursor: pointer;
-      margin-top: 40px;
-    }
-
-    #response-box {
-      margin-top: 40px;
-      font-size: 20px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      background: #ffffffcc;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .dark-mode #response-box {
-      background: #2a2a2a;
-    }
-
-    #toggle-mode {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      border: none;
-      background: none;
-      color: #0066cc;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .dark-mode #toggle-mode {
-      color: #66ccff;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>🎤 Voice Buddy - StudyBuddy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <button id="toggle-mode" onclick="toggleMode()">🌙 Dark Mode</button>
-  <h1>🎙 Talk to StudyBuddy</h1>
-  <p>Click the mic and speak your question!</p>
+  <div class="container">
+    <h1>🎤 Talk to StudyBuddy</h1>
 
-  <button id="mic-btn">🎤</button>
+    <div class="voice-box">
+      <button id="start-btn">🎙️ Start Speaking</button>
+      <p id="transcript">Say something to get started...</p>
+    </div>
 
-  <div id="response-box">Awaiting your voice input...</div>
+    <div class="response-box">
+      <h2>📣 StudyBuddy Says:</h2>
+      <p id="ai-response">Your answer will appear here...</p>
+    </div>
+
+    <a href="/chat" class="back-button">← Back to StudyBuddy</a>
+  </div>
 
   <script>
-    const micBtn = document.getElementById("mic-btn");
-    const responseBox = document.getElementById("response-box");
+    const startBtn = document.getElementById('start-btn');
+    const transcript = document.getElementById('transcript');
+    const aiResponse = document.getElementById('ai-response');
 
-    function toggleMode() {
-      document.body.classList.toggle("dark-mode");
-    }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
 
-    function speak(text) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 1;
-      utterance.pitch = 1.1;
-      utterance.voice = speechSynthesis.getVoices().find(voice => voice.name.includes("Female") || voice.name.includes("Google"));
-      speechSynthesis.speak(utterance);
-    }
-
-    micBtn.onclick = () => {
-      if (!('webkitSpeechRecognition' in window)) {
-        alert("Sorry, your browser doesn't support voice recognition.");
-        return;
-      }
-
-      const recognition = new webkitSpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
+    startBtn.addEventListener('click', () => {
       recognition.start();
-      responseBox.textContent = "🎧 Listening...";
+      transcript.textContent = "🎧 Listening...";
+    });
 
-      recognition.onresult = (event) => {
-        const userInput = event.results[0][0].transcript;
-        responseBox.textContent = "🧠 Thinking...";
-        
-        fetch("/get", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ message: userInput })
-        })
-        .then(res => res.json())
-        .then(data => {
-          responseBox.textContent = data.reply;
-          speak(data.reply);
-        })
-        .catch(err => {
-          responseBox.textContent = "❌ Error occurred!";
-          console.error(err);
+    recognition.addEventListener('result', async (e) => {
+      const spokenText = e.results[0][0].transcript;
+      transcript.textContent = `🗣️ You: ${spokenText}`;
+
+      // Send to backend
+      try {
+        const response = await fetch('/get', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: spokenText })
         });
-      };
 
-      recognition.onerror = (event) => {
-        responseBox.textContent = "⚠️ Error: " + event.error;
-      };
-    };
+        const data = await response.json();
+        aiResponse.textContent = `🤖 StudyBuddy: ${data.reply}`;
+      } catch (error) {
+        aiResponse.textContent = "⚠️ Error: " + error.message;
+      }
+    });
+
+    recognition.addEventListener('error', () => {
+      transcript.textContent = "❌ Could not recognize speech. Try again.";
+    });
   </script>
 </body>
 </html>
