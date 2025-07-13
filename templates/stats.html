@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📊 Focus Stats - StudyBuddy</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f1f5f9;
+      padding: 50px;
+      text-align: center;
+    }
+
+    .dark-mode {
+      background: #1e1e1e;
+      color: white;
+    }
+
+    #toggle-mode {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      border: none;
+      background: none;
+      color: #0066cc;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .dark-mode #toggle-mode {
+      color: #66ccff;
+    }
+
+    canvas {
+      margin-top: 40px;
+      max-width: 600px;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggle-mode" onclick="toggleMode()">🌙 Dark Mode</button>
+  <h1>📊 Focus Stats</h1>
+  <p>Track your study sessions and progress here.</p>
+
+  <canvas id="studyChart"></canvas>
+
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    const ctx = document.getElementById('studyChart');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'Pomodoro Sessions',
+          data: [4, 5, 3, 6, 2, 7, 5], // Dummy data
+          backgroundColor: '#0066cc'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: 'Weekly Study Sessions'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

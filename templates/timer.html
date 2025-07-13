@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pomodoro Timer - StudyBuddy</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .pomodoro-container {
+      max-width: 500px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+
+    .dark-mode .pomodoro-container {
+      background: rgba(40, 40, 40, 0.9);
+      color: #fff;
+    }
+
+    #timer-display {
+      font-size: 64px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .timer-buttons button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #0066cc;
+      color: white;
+    }
+
+    .timer-buttons button:hover {
+      background: #004a99;
+    }
+
+    .dark-mode .timer-buttons button {
+      background: #66ccff;
+      color: black;
+    }
+
+    #toggle-mode {
+      float: right;
+      margin-bottom: 10px;
+      background: none;
+      border: none;
+      color: #0066cc;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .dark-mode #toggle-mode {
+      color: #66ccff;
+    }
+  </style>
+</head>
+<body>
+  <div class="pomodoro-container">
+    <button id="toggle-mode" onclick="toggleMode()">🌙 Toggle Dark Mode</button>
+    <h2>⏱️ StudyBuddy - Pomodoro Timer</h2>
+
+    <div id="timer-display">25:00</div>
+
+    <div class="timer-buttons">
+      <button onclick="startTimer()">▶️ Start</button>
+      <button onclick="resetTimer()">🔄 Reset</button>
+    </div>
+  </div>
+
+  <script>
+    let duration = 25 * 60;
+    let timer = duration;
+    let running = false;
+    let interval;
+
+    function updateDisplay() {
+      const minutes = Math.floor(timer / 60);
+      const seconds = timer % 60;
+      document.getElementById("timer-display").textContent =
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (!running) {
+        running = true;
+        interval = setInterval(() => {
+          if (timer > 0) {
+            timer--;
+            updateDisplay();
+          } else {
+            clearInterval(interval);
+            alert("⏰ Time's up! Take a 5-min break.");
+            running = false;
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(interval);
+      timer = duration;
+      updateDisplay();
+      running = false;
+    }
+
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>

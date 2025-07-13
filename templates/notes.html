@@ -1,0 +1,90 @@
+<!-- templates/notes.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>📝 Notes - StudyBuddy</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f1f5f9;
+      padding: 50px;
+      text-align: center;
+    }
+    textarea {
+      width: 90%;
+      height: 300px;
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #0066cc;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>📓 Your Notes</h1>
+  <textarea id="noteArea" placeholder="Write something smart..."></textarea><br>
+
+  <button onclick="saveNote()">💾 Save to Local</button>
+  <button onclick="downloadNote()">⬇️ Download as .txt</button>
+  <button onclick="saveToServer()">📤 Save to Server</button>
+  <button onclick="clearNote()">🗑 Clear</button>
+
+  <script>
+    // Local save
+    function saveNote() {
+      const content = document.getElementById("noteArea").value;
+      localStorage.setItem("notes", content);
+      alert("✅ Saved to your browser.");
+    }
+
+    // Download
+    function downloadNote() {
+      const content = document.getElementById("noteArea").value;
+      const blob = new Blob([content], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "StudyBuddy_Notes.txt";
+      link.click();
+    }
+
+    // Save to server
+    function saveToServer() {
+      const content = document.getElementById("noteArea").value;
+      fetch('/save_note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note: content })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message));
+    }
+
+    // Clear
+    function clearNote() {
+      if (confirm("Clear everything?")) {
+        document.getElementById("noteArea").value = "";
+        localStorage.removeItem("notes");
+      }
+    }
+
+    // Load on page load
+    window.onload = () => {
+      const saved = localStorage.getItem("notes");
+      if (saved) {
+        document.getElementById("noteArea").value = saved;
+      }
+    };
+  </script>
+</body>
+</html>

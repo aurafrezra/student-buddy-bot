@@ -1,0 +1,61 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🏠 StudyBuddy Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      background: #f1f5f9;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .link-button {
+      display: inline-block;
+      margin: 15px;
+      padding: 18px 30px;
+      background: #0066cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 18px;
+      transition: background 0.3s ease;
+    }
+
+    .link-button:hover {
+      background: #004a99;
+    }
+
+    .footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎓 Welcome to StudyBuddy</h1>
+  <p>Your all-in-one AI friend for focus, fun, and success!</p>
+
+  <div>
+    <a class="link-button" href="/chat">💬 Chat with Buddy</a>
+    <a class="link-button" href="/timer">⏱ Pomodoro Timer</a>
+    <a class="link-button" href="/voice">🎙 Voice Chat</a>
+    <a class="link-button" href="/notes">📝 Take Notes</a>
+    <a class="link-button" href="/stats">📊 Focus Stats</a>
+    <a class="link-button" href="/view_notes">📂 View Saved Notes</a>
+
+  </div>
+
+  <div class="footer">
+    Made with 💙 by Boss
+  </div>
+</body>
+</html>
