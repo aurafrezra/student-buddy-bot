@@ -6,4 +6,4 @@ services:
     startCommand: "python app.py"
     envVars:
       - key: GOOGLE_API_KEY
-        value: YOUR_API_KEY_HERE
+        value: AIzaSyAEzg4GS3Ob7NsJOqCzad0sjdg6sqzAZVs
