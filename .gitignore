@@ -1,18 +1,3 @@
-# Ignore environment files
 .env
-
-# Python cache and build files
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-ENV/
-build/
-dist/
-*.egg-info/
-
-# VSCode settings (optional)
-.vscode/
