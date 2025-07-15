@@ -6,7 +6,8 @@ import sqlite3
 
 # 🔐 Load API key
 load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+
 
 # 🧠 Gemini Config
 generation_config = {
