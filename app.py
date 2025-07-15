@@ -4,9 +4,10 @@ from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
 import sqlite3
 
-# 🔐 Load API key
+# 🔐 Load API key from .env or environment
 load_dotenv()
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+
 # 🧠 Gemini Config
 generation_config = {
     "temperature": 0.7,
@@ -16,7 +17,6 @@ generation_config = {
 }
 
 # 🚀 Load Gemini Model
-genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel(
     model_name="models/gemini-1.5-flash-latest",
     generation_config=generation_config
@@ -72,7 +72,8 @@ def view_notes():
 # 🔁 AI Chat Endpoint
 @app.route('/get', methods=['POST'])
 def chatbot_response():
-    user_message = request.json['message']
+    user_message = request.json.get('message', '')
+    
     prompt = f"""
 You are StudyBuddy — a friendly, funny, and motivating AI best friend for students.
 
@@ -87,6 +88,7 @@ You are StudyBuddy — a friendly, funny, and motivating AI best friend for stud
 
 Here is what the student said: {user_message}
 """
+
     try:
         response = model.generate_content(prompt)
         return jsonify({'reply': response.text.strip()})
@@ -111,4 +113,3 @@ def save_note():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=5000)
-
