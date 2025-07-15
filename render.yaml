@@ -4,6 +4,3 @@ services:
     env: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python app.py"
-    envVars:
-      - key: GOOGLE_API_KEY
-        value: AIzaSyAEzg4GS3Ob7NsJOqCzad0sjdg6sqzAZVs
