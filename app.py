@@ -7,8 +7,6 @@ import sqlite3
 # 🔐 Load API key
 load_dotenv()
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-
-
 # 🧠 Gemini Config
 generation_config = {
     "temperature": 0.7,
